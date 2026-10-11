@@ -1,8 +1,8 @@
 # StockGuard project status
 
 Updated October 11, 2026. Current phase: local MVP handoff and publication preparation.
-The selected development workflow works in this cloud instance. External publication and
-fresh-task restoration are not verified. The specific Reuters motivation remains unverified.
+The selected development workflow works in this cloud instance. The project is published to its existing GitHub repository.
+Fresh-task restoration is not verified. The specific Reuters motivation remains unverified.
 
 ## Completed and verified
 - [x] Inspected the initially empty existing repository and verified GitHub read access.
@@ -24,7 +24,7 @@ fresh-task restoration are not verified. The specific Reuters motivation remains
 - [x] Exercised the repeatable cloud bootstrap, README example and idempotent service starter.
 - [x] Prepared CI configuration, MIT license, dependency notices and publication/career drafts.
 - [x] Saved cloud install_script and start_skill, plus additive research domain settings.
-- [x] Created a local implementation commit on main; remote push remains unperformed.
+- [x] Created a local implementation commit on main; the owner-authorized remote push is now completed.
 
 ## Decisions
 - Complete nonnegative integer product-location counts; no mixed movement/count semantics.
@@ -42,7 +42,8 @@ Final suite: 33 passed, zero failed/skipped in Debug, Release and ASan/UBSan. Sc
 HTTP smoke, browser smoke, formatting, selected static analysis and README example passed.
 SQLite is 3.54.0 in final builds. The original unsuppressed GCC TSan run returned nonzero
 on SQLite's documented dirty-read protocol; diagnosis and limit are in ADR 002.
-Hosted CI has not executed. WSL2 and fresh cloud-task restoration have not been tested.
+Hosted CI was triggered by the first push; results are tracked on GitHub Actions.
+WSL2 and fresh cloud-task restoration have not been tested.
 
 ## Benchmark status
 Final reports measure SQLite 3.54.0. Largest workload: 100,000 events. No million-event run.
@@ -64,13 +65,14 @@ Starbucks material accessed does not corroborate the specific discontinued-count
 ## Remaining tasks and required next actions
 - [ ] Verify the exact Reuters article and additional research before using a corporate case study.
 - [x] Owner authorized publishing the current project to its existing GitHub repository.
-- [ ] Execute hosted CI after an approved push; confirm WSL build on the owner's machine.
+- [x] Triggered hosted CI through an owner-authorized push.
+- [ ] Confirm the WSL build on the owner's machine.
 - [ ] Review saved cloud environment settings and publish the prepared environment through the UI.
 - [ ] Validate a new cloud task independently; do not infer restoration from current-instance success.
 - [ ] Add authenticated service boundaries and backups before any remote operational deployment.
 
-Publication is not automatic. LinkedIn content remains a draft. No visibility change or third-party
-message has been sent. Resume claims are constrained to implemented code and actual measurements.
+GitHub publication was explicitly authorized and completed. LinkedIn content remains a draft.
+No visibility change or third-party message has been sent. Resume claims are constrained to implemented code and actual measurements.
 
 ## Cloud configuration handoff
 The draft save returned status=saved. install_script contains the tested cloud bootstrap,
@@ -104,3 +106,6 @@ All 33 tests pass in Debug, Release and ASan/UBSan; scoped TSan, formatting and 
 ## GitHub publication
 The owner authorized pushing the current implementation and requested README flowcharts.
 The README now includes system architecture, decision flow and concurrent-version behavior.
+The first push was verified against the remote main commit. The GitHub repository page
+contains the new diagrams, and Actions run 38161482448 started automatically.
+Repository visibility was not changed. Cloud configuration publication remains pending.

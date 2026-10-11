@@ -166,7 +166,8 @@ The final local Debug and Release builds pass all 33 GoogleTests. ASan/UBSan pas
 Four concurrency tests pass under TSan with one documented upstream SQLite WAL-header
 suppression for GCC; see [ADR 002](docs/decisions/002-sqlite-sanitizers.md). Formatting and
 selected clang-tidy analyzers pass. HTTP and real Chromium browser smoke checks pass.
-Hosted GitHub Actions are prepared, but have not run remotely.
+[GitHub Actions](https://github.com/sunnyrishy/stockguard/actions) runs the build, sanitizer
+and quality checks on pushes and pull requests. Local results above are independent of hosted CI.
 
 [Measured benchmarks](docs/benchmarks.md) compare blind acceptance, verify-everything,
 confidence-only and StockGuard using labeled independent synthetic snapshots. On 10,000
