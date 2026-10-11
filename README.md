@@ -7,14 +7,15 @@ Built with **C++20 and SQLite**, with an animated, interactive website. Uses syn
 
 ## Interactive website
 
+**[Open the interactive demo](https://sunnyrishy.github.io/stockguard/)**
+
 Choose a scan, watch it pass through the checks, and see the count, version and audit change.
 The site includes moving shelf scans, a decision journey, human review and motion controls.
 
 - **Local mode:** runs the real C++/SQLite engine using the commands below.
 - **Standalone mode:** illustrates the policy in your browser with session-only state.
 
-[Website walkthrough and screenshot](docs/website.md). The GitHub Pages workflow publishes
-standalone mode when Pages is enabled with GitHub Actions as its source.
+[Website walkthrough and screenshot](docs/website.md). GitHub Pages hosts standalone mode; the local dashboard runs the real engine.
 
 ## What happens to a scan?
 

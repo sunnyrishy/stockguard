@@ -1,5 +1,7 @@
 # Interactive website
 
+**[Launch the website](https://sunnyrishy.github.io/stockguard/)**
+
 The decision studio turns each scan into a visible journey: observe, check, decide, protect.
 Moving cartons, a scan beam, a travelling token and count transitions explain the result.
 

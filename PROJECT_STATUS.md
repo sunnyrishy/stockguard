@@ -142,3 +142,10 @@ Website run 38169376209 built and uploaded the deployable github-pages artifact,
 its deployment failed because Pages is not enabled (Get Pages site: Not Found).
 To complete public hosting, choose GitHub Actions in repository Settings → Pages and rerun
 the website workflow. Changing that setting through this environment's GitHub API is blocked.
+
+## Public website deployment
+GitHub Pages deployment succeeded in Actions run 38170322585. The deployment reports
+https://sunnyrishy.github.io/stockguard/ as the public URL. The README links to the site.
+Direct access to github.io is blocked by this workspace's proxy, so the website workflow
+now verifies the published HTML, JavaScript, CSS and benchmark report from GitHub's runner.
+The published demo is the session-only browser simulation, not a hosted C++ service.
