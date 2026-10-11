@@ -79,8 +79,8 @@ The draft save returned status=saved. install_script contains the tested cloud b
 formatting, static analysis and functional HTTP check. start_skill records tool activation,
 working directory, build/test commands, service startup, readiness and process-restart rules.
 Research domains were added while preserving package-manager presets. Saving did not publish
-the environment. No credentials were required. Local-only Git commits cannot be assumed to
-restore reliably in a new task; remote publication and restoration verification remain pending.
+the environment. No credentials were required. The implementation is now pushed to GitHub. A new cloud task still needs independent
+validation; saving configuration alone does not verify restoration.
 
 ## Follow-up verification
 - [x] Enhanced the runner with explicit storage selection, repetition counts, binary provenance,
@@ -94,7 +94,7 @@ restore reliably in a new task; remote publication and restoration verification 
   environment draft without changing existing network entries. News verification remains open.
 
 The follow-up cloud draft retains existing setup/start instructions and adds the two Python
-reporting guards. The draft save was confirmed. Publication remains unperformed.
+reporting guards. The draft save was confirmed. Cloud configuration publication remains unperformed.
 
 ## Review resolution fix
 Pending evidence can now be rejected after catalog deactivation, without an inventory record,
@@ -109,3 +109,11 @@ The README now includes system architecture, decision flow and concurrent-versio
 The first push was verified against the remote main commit. The GitHub repository page
 contains the new diagrams, and Actions run 38161482448 started automatically.
 Repository visibility was not changed. Cloud configuration publication remains pending.
+
+## Fresh-clone verification
+Cloned GitHub commit 72712bd into a new temporary directory with no existing build files.
+The README configure/build steps, 33 C++ tests, HTTP smoke and two Python reporting guards passed.
+The demo starter passed health checks and reused its process on a second invocation.
+The temporary demo process was stopped after verification. This verifies Git-based setup
+on this Linux host, not a new cloud task or the owner's WSL installation.
+Latest hosted CI for that commit passed: Actions run 38162276395.

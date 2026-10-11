@@ -53,11 +53,10 @@ and verified no page JavaScript exceptions. The older Chromium 133 runtime crash
 rendering, so it was replaced rather than counted as a passing UI check.
 
 CI defines Debug, Release, ASan/UBSan and scoped TSan jobs, HTTP smoke, formatting and
-clang-tidy checks. These commands were validated locally, but hosted GitHub Actions have
-not run because no remote push or publication occurred. WSL2 instructions have not been
-independently executed on the owner's Windows machine.
+clang-tidy checks. Local checks and [hosted GitHub Actions](https://github.com/sunnyrishy/stockguard/actions/runs/38162276395)
+have passed. WSL2 instructions have not been independently executed on the owner's Windows machine.
 
-Final local results: Debug 30/30, Release 30/30, ASan/UBSan 30/30, scoped TSan 4/4;
+Final local results: Debug 33/33, Release 33/33, ASan/UBSan 33/33, scoped TSan 4/4;
 HTTP smoke, browser workflow, formatting and selected static analysis passed.
 
 Benchmark reporting guards: `python3 -m unittest discover -s tests -p 'test_*.py' -v`.
