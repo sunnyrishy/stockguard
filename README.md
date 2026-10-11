@@ -1,43 +1,20 @@
 # StockGuard
 
-A C++20 inventory reconciliation engine that keeps uncertain scanner counts separate from
-trusted inventory. It produces explainable ACCEPT, REVIEW, REJECT and DEFER decisions,
-commits verified changes with their audit records, and safely replays duplicate events.
+StockGuard checks scanner counts before updating inventory. Uncertain counts go to human
+review, and every inventory change has an audit record.
 
-This independent project uses synthetic data. It is not affiliated with Starbucks or deployed
-in a store. The owner's cited Reuters discontinuation report remains unverified; see
-[research and source boundaries](docs/research.md). The implemented problem stands on its
-own: a model observation should not silently become an authoritative inventory fact.
+Built with **C++20 and SQLite**, with a local browser demo. Uses synthetic data.
 
-## What works
+## What happens to a scan?
 
-- Product catalog creation, updates and queries; units cannot change after inventory exists.
-- Versioned product-location inventory and signed trusted movements.
-- Complete-count validation with coverage, freshness, version, confidence and discrepancy rules.
-- Durable observation IDs, conflicting-payload rejection and alternate-ID scan replay protection.
-- Partial batches with independent results and transactions.
-- Human confirmation and correction with optimistic version checks; rejection without ledger changes.
-- Immutable original decisions, pending review queries, review history and transactional audit.
-- SQLite WAL, FULL synchronous, foreign keys, schema versioning and RAII rollback.
-- Local browser demo with scenario buttons, review forms, ledger and benchmark results.
-- 33 GoogleTests, fault injection, process-death recovery and concurrent submission tests.
+| Decision | Meaning | Inventory changes? |
+| --- | --- | --- |
+| ACCEPT | The count passes all checks. | Yes, with an audit record. |
+| REVIEW | Confidence is low or the count differs too much. | No. |
+| DEFER | Inventory is missing, coverage is partial, or the version changed. | No. |
+| REJECT | The scan is stale, duplicated, or uses an unknown/inactive product. | No. |
 
-```mermaid
-flowchart LR
-    UI[Local browser demo] --> Adapter[Python command adapter]
-    Adapter --> CLI[C++ JSON lines]
-    CLI --> Service[Transactional application service]
-    Service --> Rules[Pure reconciliation policy]
-    Service --> SQLite[(Trusted state, observations and audit)]
-```
-
-The engine is a library independent of the interface. The Python adapter only transports
-requests to one C++ executable. SQLite serializes writers across connections and processes.
-A scan carries the version it observed; recorded stock movements advance that version.
-Uncertain decisions leave trusted quantities unchanged. Human approval represents a fresh
-complete count, rather than an unverified endorsement of an old scan.
-
-## How a scan becomes a decision
+Malformed input returns an error. Repeating the same observation returns its saved result.
 
 ```mermaid
 flowchart TD
@@ -61,11 +38,53 @@ flowchart TD
     Policy -->|Yes| Accept[ACCEPT: update inventory and audit atomically]
 ```
 
-REVIEW and DEFER enter the pending queue. A reviewer can reject the evidence without
-changing inventory, or confirm/correct after a fresh complete count with a matching ledger
-version. Original decisions remain immutable, and repeated requests do not duplicate updates.
+Reviewers can reject pending evidence, or confirm/correct it after a fresh count.
+Confirmation and correction require the current inventory version.
 
-## Why concurrent changes stay safe
+## How it fits together
+
+```mermaid
+flowchart LR
+    UI[Local browser demo] --> Adapter[Python command adapter]
+    Adapter --> CLI[C++ JSON lines]
+    CLI --> Service[Transactional application service]
+    Service --> Rules[Pure reconciliation policy]
+    Service --> SQLite[(Trusted state, observations and audit)]
+```
+
+The C++ engine handles rules and storage. The Python adapter connects it to the browser.
+Inventory updates, decisions and audit records commit together or roll back together.
+
+## Try it locally
+
+Use Linux or WSL2 with GCC 12+, CMake 3.20+, Ninja and Python 3.
+Internet access is needed for pinned dependencies.
+
+On Ubuntu/WSL2, install tools if needed:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y g++ cmake ninja-build python3 python3-venv curl
+```
+
+Build and test from the repository root:
+
+```sh
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j 2
+ctest --test-dir build --output-on-failure
+python3 scripts/smoke.py
+scripts/start-demo.sh
+```
+
+On your local machine, open `http://127.0.0.1:8080`. Try a consistent count, a large
+discrepancy, and a review action. Data stays in `.runtime/demo.db` between restarts.
+The cloud workspace uses `bash scripts/bootstrap-cloud.sh`; no cloud preview is provided.
+
+See the [demo walkthrough](docs/demo.md), [command example](docs/command-example.md),
+and [API reference](docs/api.md).
+
+## What if inventory changes during a scan?
 
 ```mermaid
 sequenceDiagram
@@ -82,134 +101,29 @@ sequenceDiagram
     Note over Service,DB: ACCEPT writes quantity, version, decision and audit in one transaction
 ```
 
-The version check prevents a scan from overwriting a newer stock movement. A failure before
-commit rolls back the transaction. Once committed, replay returns the saved decision.
+Version checks stop older scans from overwriting newer stock movements.
 
-## Build
+## Verified so far
 
-Linux and WSL2 are the intended platforms. Require GCC 12+ or a compatible C++20 compiler,
-CMake 3.20+, Ninja, Python 3 and HTTPS access to dependency archives. Default builds compile
-checksum-pinned SQLite 3.54.0, including the upstream WAL-reset corruption fix. JSON 3.11.3
-and GoogleTest 1.16.0 are pinned by commit and checksum. See [dependencies](THIRD_PARTY.md).
+- 33 tests pass in Debug, Release and ASan/UBSan.
+- Four concurrency tests pass under TSan with a [documented SQLite suppression](docs/decisions/002-sqlite-sanitizers.md).
+- HTTP, Chromium browser, formatting and static checks pass.
+- [GitHub Actions](https://github.com/sunnyrishy/stockguard/actions) checks pushes and pull requests.
 
-On Ubuntu/WSL2, install build tools if absent:
+Synthetic benchmarks cover up to 100,000 events. The policy flagged 4,031 of 5,070
+incorrect counts, but still accepted 1,039. This does not establish real-store accuracy.
+Storage tests do not prove durability after physical power loss.
+[Results and methodology](docs/benchmarks.md) explain the measurements.
 
-```sh
-sudo apt-get update
-sudo apt-get install -y g++ cmake ninja-build python3 python3-venv curl
-```
+## Limits and further reading
 
-From the repository root:
+This is a local demonstration with no production authentication, automated backups or
+real-store integration. It is independent of Starbucks; the cited Reuters claim remains
+unverified. See [limitations](docs/limitations.md) and [research](docs/research.md).
 
-```sh
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
-cmake --build build -j 2
-ctest --test-dir build --output-on-failure
-python3 scripts/smoke.py
-```
+- [Architecture](docs/architecture.md) and [data model](docs/data-model.md)
+- [Decision rules](docs/reconciliation-design.md) and [concurrency](docs/concurrency-design.md)
+- [Testing](docs/testing.md) and [failure analysis](docs/failure-model.md)
+- [Project status](PROJECT_STATUS.md) and [portfolio drafts](docs/portfolio.md)
 
-The restricted cloud workspace uses `bash scripts/bootstrap-cloud.sh`, which installs pinned
-user-local tooling and executes the same build and tests. Future cloud tasks should use the
-existing checkout; no extra Git worktree is needed. Initial downloads need sqlite.org,
-codeload.github.com, pypi.org and files.pythonhosted.org. Dependencies remain in ignored
-build directories. A system SQLite override is optional and requires version 3.51.3+:
-`-DSTOCKGUARD_SYSTEM_SQLITE=ON`.
-
-## Run the demonstration
-
-```sh
-scripts/start-demo.sh
-```
-
-The demo listens on loopback port 8080 and persists local state in `.runtime/demo.db`.
-The starter verifies backend health and can be repeated without replacing existing data.
-It initializes only an absent demo product and inventory. Use the local browser on your
-WSL/development machine. Cloud onboarding validates it with internal requests; no cloud
-web preview is provided.
-
-[Walkthrough and actual dashboard screenshot](docs/demo.md). The interface displays current
-versions so a stale review can be detected rather than overwrite a concurrent movement.
-The demo uses synthetic actors, without production authentication or authorization.
-
-## Command example
-
-This runnable example uses a new database and the actual current time:
-
-```sh
-mkdir -p .runtime
-python3 - <<'PY' | build/stockguard --db .runtime/example.db
-import json, time
-requests = [
-    dict(op='product_put', id='milk', name='Whole milk', category='dairy',
-         unit='carton', status='active'),
-    dict(op='initialize', product_id='milk', location_id='store', quantity=100, actor='seed'),
-    dict(op='ingest', observation=dict(id='scan-1', scan_id='batch-1', product_id='milk',
-         location_id='store', quantity=101, confidence=0.99, complete=True,
-         expected_version=1, observed_at=int(time.time()), source='synthetic')),
-    dict(op='inventory'),
-    dict(op='audit'),
-]
-for request in requests:
-    print(json.dumps(request))
-PY
-```
-
-Expect ACCEPT, quantity 101, version 2 and two audit rows. Initialization refuses to overwrite
-an existing record, so use a fresh database path to repeat this example. Replaying the same
-observation returns the original decision without an extra inventory change. Full request
-schemas, pagination, errors and partial batch semantics are in [API documentation](docs/api.md).
-A custom policy can be supplied with `--policy config/policy.json`.
-
-## Evidence and measurements
-
-The final local Debug and Release builds pass all 33 GoogleTests. ASan/UBSan passes the same suite.
-Four concurrency tests pass under TSan with one documented upstream SQLite WAL-header
-suppression for GCC; see [ADR 002](docs/decisions/002-sqlite-sanitizers.md). Formatting and
-selected clang-tidy analyzers pass. HTTP and real Chromium browser smoke checks pass.
-[GitHub Actions](https://github.com/sunnyrishy/stockguard/actions) runs the build, sanitizer
-and quality checks on pushes and pull requests. Local results above are independent of hosted CI.
-
-[Measured benchmarks](docs/benchmarks.md) compare blind acceptance, verify-everything,
-confidence-only and StockGuard using labeled independent synthetic snapshots. On 10,000
-snapshots, StockGuard gates 4,031 of 5,070 incorrect counts, while accepting 1,039 plausible
-wrong counts and gating 991 correct ones. These are synthetic policy results, not evidence
-of real-store accuracy. The 100,000-event durable-service benchmark preserves the final ledger
-and verifies replays; raw throughput and latency reports include compiler and hardware data.
-The timed database is on tmpfs, so those figures do not describe physical disk durability.
-
-```sh
-cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
-cmake --build build-release -j 2
-python3 scripts/run-benchmarks.py
-```
-
-Initial tmpfs runs cover up to 100,000 observations and four workers. A separate three-run
-workspace-storage experiment measures 10,000 events per run and independently verifies the
-closed database, observation totals and audit rows. The runner records storage type and
-reports a throughput range and median. See the benchmark methodology for reproduction. A
-million-event run is supported but unrun. No performance improvement or capacity guarantee
-is inferred from these measurements. [Testing instructions](docs/testing.md) include
-sanitizers, formatting, static analysis and the optional screenshot-producing browser test.
-
-## Design tradeoffs and boundaries
-
-The modular monolith favors explicit state and transaction boundaries over service infrastructure.
-Queries also acquire BEGIN IMMEDIATE, which simplifies snapshots but limits concurrent reads.
-There is no worker queue because SQLite is one writer and measured concurrency did not
-justify queue lifecycle complexity. JSON evidence costs allocation and serialization time;
-profiling is recorded before proposing statement caching or other optimization.
-
-Physical count correctness, calibrated confidence, identity enforcement, backup automation,
-distributed replication, fractional units and real store integrations are outside this release.
-Audit durability does not mean tamper-proof storage. [Limits and roadmap](docs/limitations.md)
-record these distinctions, the news verification gap and untested WSL/cloud restoration.
-
-Read [architecture](docs/architecture.md), [data model](docs/data-model.md),
-[decision rules](docs/reconciliation-design.md), [concurrency](docs/concurrency-design.md),
-and [failure analysis](docs/failure-model.md) for the implemented guarantees.
-[PROJECT_STATUS.md](PROJECT_STATUS.md) records verified progress and remaining work.
-[Portfolio materials](docs/portfolio.md) contain a LinkedIn draft, resume bullets and interview
-explanations. GitHub publication is authorized by the owner. LinkedIn publication and repository visibility
-changes still require separate approval.
-
-MIT licensed. Third-party notices and versions are in [THIRD_PARTY.md](THIRD_PARTY.md).
+MIT licensed. [Dependency versions and notices](THIRD_PARTY.md).
