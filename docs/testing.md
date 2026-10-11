@@ -67,3 +67,8 @@ closed-database audit and inventory totals. The two reporting guards run in the 
 TSan CI repeats the four concurrency tests 20 times each. TSan builds use the
 [documented build-local SQLite atomic-access patch](decisions/002-sqlite-sanitizers.md)
 and the existing WAL-header suppression; no additional suppression is enabled.
+
+Website checks: `node --test tests/browser-simulator.test.cjs` runs four browser-model
+regressions. The Chromium check now covers all four outcomes, replay, review correction,
+rejection, motion pause, reduced-motion preferences and a 390px mobile viewport.
+Set `STOCKGUARD_STATIC_SITE=1` to exercise the standalone site instead of the real engine.

@@ -126,3 +126,13 @@ and normal build modes remain unchanged; no suppression was added.
 All four concurrency tests passed 20 consecutive repetitions each after the patch.
 All 33 Debug tests and formatting passed. Missing/duplicate patch contexts were rejected.
 See ADR 002 for scope and limits. Hosted verification of this fix follows the push.
+
+## Interactive website delivery
+The dashboard now includes an animated shelf scan, a travelling decision token, outcome
+explanations, live count/version transitions, review actions and a mobile layout. Pause and
+system reduced-motion controls are supported. The local dashboard uses C++/SQLite; the
+standalone site is a clearly labelled session-only educational browser model.
+Chromium exercised both modes, all four outcomes, replay, correction, rejection, motion
+controls and mobile sizing. Four Node regression tests cover the browser model.
+A static builder and GitHub Pages deployment workflow are included. Enabling Pages through
+the GitHub API was blocked by HTTP Forbidden; deployment verification follows the push.

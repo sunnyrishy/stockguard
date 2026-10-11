@@ -77,7 +77,8 @@ def make_handler(executable, database):
                 return
             assets = {'/': ('index.html', 'text/html; charset=utf-8'),
                       '/app.js': ('app.js', 'text/javascript; charset=utf-8'),
-                      '/style.css': ('style.css', 'text/css; charset=utf-8')}
+                      '/style.css': ('style.css', 'text/css; charset=utf-8'),
+                      '/simulator.js': ('simulator.js', 'text/javascript; charset=utf-8')}
             if self.path == '/health':
                 try:
                     result = command(executable, database, {'op': 'metrics'})

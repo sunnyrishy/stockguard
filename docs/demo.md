@@ -1,4 +1,6 @@
 # Demonstration walkthrough
+
+The [animated website guide](website.md) covers motion, mobile layout and standalone hosting.
 Build and run `scripts/start-demo.sh`. The local interface uses the default milk/demo
 inventory initialized only when absent. Inspect the trusted count and version.
 

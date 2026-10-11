@@ -3,7 +3,18 @@
 StockGuard checks scanner counts before updating inventory. Uncertain counts go to human
 review, and every inventory change has an audit record.
 
-Built with **C++20 and SQLite**, with a local browser demo. Uses synthetic data.
+Built with **C++20 and SQLite**, with an animated, interactive website. Uses synthetic data.
+
+## Interactive website
+
+Choose a scan, watch it pass through the checks, and see the count, version and audit change.
+The site includes moving shelf scans, a decision journey, human review and motion controls.
+
+- **Local mode:** runs the real C++/SQLite engine using the commands below.
+- **Standalone mode:** illustrates the policy in your browser with session-only state.
+
+[Website walkthrough and screenshot](docs/website.md). The GitHub Pages workflow publishes
+standalone mode when Pages is enabled with GitHub Actions as its source.
 
 ## What happens to a scan?
 
