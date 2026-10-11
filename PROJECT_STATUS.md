@@ -63,7 +63,7 @@ Starbucks material accessed does not corroborate the specific discontinued-count
 
 ## Remaining tasks and required next actions
 - [ ] Verify the exact Reuters article and additional research before using a corporate case study.
-- [ ] Review the prepared repository and MIT license, then approve desired GitHub publication.
+- [x] Owner authorized publishing the current project to its existing GitHub repository.
 - [ ] Execute hosted CI after an approved push; confirm WSL build on the owner's machine.
 - [ ] Review saved cloud environment settings and publish the prepared environment through the UI.
 - [ ] Validate a new cloud task independently; do not infer restoration from current-instance success.
@@ -100,3 +100,7 @@ or after the ledger version advances. Confirmation and correction retain their e
 Three regression tests cover closure, durable replay, unchanged audit totals and conflicting actors.
 The HTTP check and real Chromium workflow verify rejection without a supplied version.
 All 33 tests pass in Debug, Release and ASan/UBSan; scoped TSan, formatting and static analysis pass.
+
+## GitHub publication
+The owner authorized pushing the current implementation and requested README flowcharts.
+The README now includes system architecture, decision flow and concurrent-version behavior.

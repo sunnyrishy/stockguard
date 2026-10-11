@@ -37,6 +37,54 @@ A scan carries the version it observed; recorded stock movements advance that ve
 Uncertain decisions leave trusted quantities unchanged. Human approval represents a fresh
 complete count, rather than an unverified endorsement of an old scan.
 
+## How a scan becomes a decision
+
+```mermaid
+flowchart TD
+    Scan[Scanner observation] --> Validate{Valid fields and count?}
+    Validate -->|No| Error[Return input error]
+    Validate -->|Yes| Replay{Observation ID already saved?}
+    Replay -->|Same payload| Saved[Return original decision]
+    Replay -->|Changed payload| Conflict[Return ID conflict]
+    Replay -->|New ID| Duplicate{Scan key already claimed?}
+    Duplicate -->|Yes| Reject[REJECT: preserve inventory]
+    Duplicate -->|No| Catalog{Active product?}
+    Catalog -->|No| Reject
+    Catalog -->|Yes| Inventory{Inventory exists?}
+    Inventory -->|No| Defer[DEFER: preserve inventory]
+    Inventory -->|Yes| Time{Fresh observation?}
+    Time -->|No| Reject
+    Time -->|Yes| Coverage{Matching version and complete count?}
+    Coverage -->|No| Defer
+    Coverage -->|Yes| Policy{Confidence and discrepancy acceptable?}
+    Policy -->|No| Review[REVIEW: preserve inventory]
+    Policy -->|Yes| Accept[ACCEPT: update inventory and audit atomically]
+```
+
+REVIEW and DEFER enter the pending queue. A reviewer can reject the evidence without
+changing inventory, or confirm/correct after a fresh complete count with a matching ledger
+version. Original decisions remain immutable, and repeated requests do not duplicate updates.
+
+## Why concurrent changes stay safe
+
+```mermaid
+sequenceDiagram
+    participant Scanner
+    participant Service as C++ service
+    participant DB as SQLite
+    Scanner->>Service: Count based on inventory version 1
+    Service->>DB: BEGIN IMMEDIATE
+    Service->>DB: Read current inventory and check replay
+    DB-->>Service: Current version 2 after a stock movement
+    Service->>DB: Save DEFER decision; preserve quantity
+    Service->>DB: COMMIT
+    Service-->>Scanner: Version conflict with explanation
+    Note over Service,DB: ACCEPT writes quantity, version, decision and audit in one transaction
+```
+
+The version check prevents a scan from overwriting a newer stock movement. A failure before
+commit rolls back the transaction. Once committed, replay returns the saved decision.
+
 ## Build
 
 Linux and WSL2 are the intended platforms. Require GCC 12+ or a compatible C++20 compiler,
@@ -160,6 +208,7 @@ Read [architecture](docs/architecture.md), [data model](docs/data-model.md),
 and [failure analysis](docs/failure-model.md) for the implemented guarantees.
 [PROJECT_STATUS.md](PROJECT_STATUS.md) records verified progress and remaining work.
 [Portfolio materials](docs/portfolio.md) contain a LinkedIn draft, resume bullets and interview
-explanations. Publication and visibility changes require the owner's final approval.
+explanations. GitHub publication is authorized by the owner. LinkedIn publication and repository visibility
+changes still require separate approval.
 
 MIT licensed. Third-party notices and versions are in [THIRD_PARTY.md](THIRD_PARTY.md).
