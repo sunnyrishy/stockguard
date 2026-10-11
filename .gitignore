@@ -1,0 +1,7 @@
+/build*/
+/.tools/
+/.runtime/
+__pycache__/
+*.db
+*.db-wal
+*.db-shm

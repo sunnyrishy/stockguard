@@ -1,0 +1,524 @@
+{
+  "compiler": "14.2.0",
+  "hardware_threads": 5,
+  "observations": 10000,
+  "policy": {
+    "absolute_tolerance": 2,
+    "future_skew_seconds": 5,
+    "max_age_seconds": 300,
+    "minimum_confidence": 0.95,
+    "relative_tolerance": 0.05
+  },
+  "policy_timings": {
+    "blind": {
+      "accepted": 10000,
+      "observations_per_second": 240194076.81406575,
+      "seconds": 4.1633e-05
+    },
+    "confidence": {
+      "accepted": 7945,
+      "observations_per_second": 674159.4546211811,
+      "seconds": 0.014833286
+    },
+    "stockguard": {
+      "accepted": 4978,
+      "observations_per_second": 150293.80936793337,
+      "seconds": 0.06653634
+    },
+    "verify_everything": {
+      "accepted": 0,
+      "observations_per_second": 273635244.2194554,
+      "seconds": 3.6545e-05
+    }
+  },
+  "quality": {
+    "blind": {
+      "fn": 5070,
+      "fp": 0,
+      "incorrect_updates_committed": 5070,
+      "precision": 0.0,
+      "recall": 0.0,
+      "review_or_recount_workload": 0,
+      "simulated_verification_seconds": 0,
+      "tn": 4930,
+      "tp": 0
+    },
+    "confidence": {
+      "fn": 4006,
+      "fp": 991,
+      "incorrect_updates_committed": 4006,
+      "precision": 0.5177615571776155,
+      "recall": 0.20986193293885602,
+      "review_or_recount_workload": 2055,
+      "simulated_verification_seconds": 30825,
+      "tn": 3939,
+      "tp": 1064
+    },
+    "stockguard": {
+      "fn": 1039,
+      "fp": 991,
+      "incorrect_updates_committed": 1039,
+      "precision": 0.802668259657507,
+      "recall": 0.795069033530572,
+      "review_or_recount_workload": 5022,
+      "simulated_verification_seconds": 75330,
+      "tn": 3939,
+      "tp": 4031
+    },
+    "verify_everything": {
+      "fn": 0,
+      "fp": 4930,
+      "incorrect_updates_committed": 0,
+      "precision": 0.507,
+      "recall": 1.0,
+      "review_or_recount_workload": 10000,
+      "simulated_verification_seconds": 150000,
+      "tn": 0,
+      "tp": 5070
+    }
+  },
+  "quality_examples": [
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.6,
+          "discrepancy": 0,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 100,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Human verification required for uncertain classification",
+        "reason": "low_confidence",
+        "status": "REVIEW"
+      },
+      "ground_truth": 100,
+      "incorrect": false,
+      "observation": {
+        "complete": true,
+        "confidence": 0.6,
+        "expected_version": 1,
+        "id": "o0",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 100,
+        "scan_id": "s0",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 2,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 102,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Complete fresh count satisfies all configured checks",
+        "reason": "consistent_count",
+        "status": "ACCEPT"
+      },
+      "ground_truth": 100,
+      "incorrect": true,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o1",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 102,
+        "scan_id": "s1",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 0,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 100,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Complete fresh count satisfies all configured checks",
+        "reason": "consistent_count",
+        "status": "ACCEPT"
+      },
+      "ground_truth": 100,
+      "incorrect": false,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o2",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 100,
+        "scan_id": "s2",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 0,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 100,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Complete fresh count satisfies all configured checks",
+        "reason": "consistent_count",
+        "status": "ACCEPT"
+      },
+      "ground_truth": 100,
+      "incorrect": false,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o3",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 100,
+        "scan_id": "s3",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.5,
+          "discrepancy": 100,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 0,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Human verification required for uncertain classification",
+        "reason": "low_confidence",
+        "status": "REVIEW"
+      },
+      "ground_truth": 100,
+      "incorrect": true,
+      "observation": {
+        "complete": true,
+        "confidence": 0.5,
+        "expected_version": 1,
+        "id": "o4",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 0,
+        "scan_id": "s4",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 0,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 100,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Complete fresh count satisfies all configured checks",
+        "reason": "consistent_count",
+        "status": "ACCEPT"
+      },
+      "ground_truth": 100,
+      "incorrect": false,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o5",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 100,
+        "scan_id": "s5",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 0,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 100,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Complete fresh count satisfies all configured checks",
+        "reason": "consistent_count",
+        "status": "ACCEPT"
+      },
+      "ground_truth": 100,
+      "incorrect": false,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o6",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 100,
+        "scan_id": "s6",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 60,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 160,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Count differs from the movement-adjusted ledger",
+        "reason": "large_discrepancy",
+        "status": "REVIEW"
+      },
+      "ground_truth": 100,
+      "incorrect": true,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o7",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 160,
+        "scan_id": "s7",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 60,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 160,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Count differs from the movement-adjusted ledger",
+        "reason": "large_discrepancy",
+        "status": "REVIEW"
+      },
+      "ground_truth": 100,
+      "incorrect": true,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o8",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 160,
+        "scan_id": "s8",
+        "source": "synthetic"
+      }
+    },
+    {
+      "decision": {
+        "evidence": {
+          "complete": true,
+          "confidence": 0.99,
+          "discrepancy": 0,
+          "expected_version": 1,
+          "inventory_quantity": 100,
+          "inventory_source": "init",
+          "inventory_updated_at": 1000,
+          "inventory_version": 1,
+          "now": 1000,
+          "observed_at": 1000,
+          "observed_quantity": 100,
+          "policy": {
+            "absolute_tolerance": 2,
+            "future_skew_seconds": 5,
+            "max_age_seconds": 300,
+            "minimum_confidence": 0.95,
+            "relative_tolerance": 0.05
+          }
+        },
+        "explanation": "Complete fresh count satisfies all configured checks",
+        "reason": "consistent_count",
+        "status": "ACCEPT"
+      },
+      "ground_truth": 100,
+      "incorrect": false,
+      "observation": {
+        "complete": true,
+        "confidence": 0.99,
+        "expected_version": 1,
+        "id": "o9",
+        "location_id": "store",
+        "observed_at": 1000,
+        "product_id": "milk",
+        "quantity": 100,
+        "scan_id": "s9",
+        "source": "synthetic"
+      }
+    }
+  ],
+  "quality_seconds": 0.136156834,
+  "seed": 2026,
+  "sqlite_version": "3.54.0",
+  "throughput": {
+    "database_bytes": 12476416,
+    "duplicate_replays_prevented": 100,
+    "final_inventory": [
+      {
+        "location_id": "store",
+        "product_id": "milk",
+        "quantity": 100,
+        "source": "observation",
+        "updated_at": 1000,
+        "version": 10001
+      }
+    ],
+    "max_rss_kib": 10624,
+    "median_us": 104.888,
+    "observations_per_second": 7951.480049653463,
+    "p95_us": 169.135,
+    "p99_us": 383.948,
+    "seconds": 1.257627503,
+    "total_applied_events": 10000
+  },
+  "workers": 1,
+  "environment": {
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "available_cpus": 5,
+    "build": "Release: GCC -O3 -DNDEBUG; SQLite 3.54.0 source built with release flags",
+    "measurement": "one run; /tmp tmpfs database; no HTTP or CLI process startup"
+  }
+}

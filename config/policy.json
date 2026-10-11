@@ -1,0 +1,7 @@
+{
+  "minimum_confidence": 0.95,
+  "absolute_tolerance": 2,
+  "relative_tolerance": 0.05,
+  "max_age_seconds": 300,
+  "future_skew_seconds": 5
+}

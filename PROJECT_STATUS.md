@@ -1,0 +1,69 @@
+# StockGuard project status
+
+Updated October 11, 2026. Current phase: local MVP handoff and publication preparation.
+The selected development workflow works in this cloud instance. External publication and
+fresh-task restoration are not verified. The specific Reuters motivation remains unverified.
+
+## Completed and verified
+- [x] Inspected the initially empty existing repository and verified GitHub read access.
+- [x] Verified C++20 builds with GCC 14.2 and installed repeatable user-local tooling.
+- [x] Recorded requirements, scope, data semantics, source boundaries and architecture diagrams.
+- [x] Implemented catalog, trusted inventory, observations, policy decisions and movement ledger.
+- [x] Persisted decisions, trusted updates and audit with SQLite transactions and prepared statements.
+- [x] Implemented ID/scan replay protection, conflicts, partial batches and version-checked review.
+- [x] Added queries, pending review, metrics, immutable history and audit/review reporting.
+- [x] Implemented bounded local HTTP adapter and browser scenario/review demonstration.
+- [x] Passed 30 GoogleTests in Debug and ASan/UBSan builds.
+- [x] Passed four concurrency tests under GCC TSan with one documented upstream WAL suppression.
+- [x] Passed clang-format 19 checks and selected clang-tidy analyzers with no project diagnostics.
+- [x] Passed HTTP functional smoke, JSON request bounds and cross-site request rejection checks.
+- [x] Passed a real Chromium browser workflow and captured docs/images/dashboard.png.
+- [x] Ran seeded 1,000/10,000/100,000-event benchmarks and 1/2/4-worker comparisons.
+- [x] Compared four policies against synthetic labels and explicitly reported false negatives.
+- [x] Ran a separate GCC -pg profile; retained a flat-profile excerpt.
+- [x] Exercised the repeatable cloud bootstrap, README example and idempotent service starter.
+- [x] Prepared CI configuration, MIT license, dependency notices and publication/career drafts.
+
+## Decisions
+- Complete nonnegative integer product-location counts; no mixed movement/count semantics.
+- Recorded movements update expected state; version and freshness checks prevent stale overwrites.
+- C++20 modular monolith, pure rule function, JSON-lines executable and Python standard-library demo.
+- SQLite WAL, foreign keys, synchronous=FULL, BEGIN IMMEDIATE and a five-second busy timeout.
+- Pin and compile SQLite 3.54.0 after official research identified an older WAL-reset defect.
+- Keep initial decisions immutable; human resolutions are separate transactional records.
+- No asynchronous ingestion queue, based on the single-writer model and measured scaling.
+- Apply one named upstream WAL-header TSan suppression for GCC, without suppressing StockGuard.
+
+## Checks and evidence
+Detailed commands: docs/testing.md. Raw counters and measurements: reports/benchmark-*.json.
+Final suite: 30 passed, zero failed/skipped in Debug and ASan/UBSan. Scoped TSan: 4 passed.
+HTTP smoke, browser smoke, formatting, selected static analysis and README example passed.
+SQLite is 3.54.0 in final builds. The original unsuppressed GCC TSan run returned nonzero
+on SQLite's documented dirty-read protocol; diagnosis and limit are in ADR 002.
+Hosted CI has not executed. WSL2 and fresh cloud-task restoration have not been tested.
+
+## Benchmark status
+Final reports measure SQLite 3.54.0. Largest workload: 100,000 events. No million-event run.
+Throughput runs use /tmp tmpfs and include transaction/audit work, not physical disk latency.
+The 10,000-snapshot quality run gates 4,031/5,070 incorrect counts but accepts 1,039 plausible
+wrong counts and gates 991 correct counts. This is synthetic evidence, not production accuracy.
+No measured performance optimization is claimed. Further work needs persistent-storage runs,
+repetitions, real authorized labels and a calibrated verification cost model.
+
+## Known issues and boundaries
+No known critical StockGuard data-corruption defect was found by the executed tests. This
+is not a proof of absence. There is no production authentication, backup automation,
+replication, tamper-proof audit or physical power-loss experiment. See docs/limitations.md.
+The claimed Reuters report could not be read due to a 401 access challenge. Official
+Starbucks material accessed does not corroborate the specific discontinued-counting claim.
+
+## Remaining tasks and required next actions
+- [ ] Verify the exact Reuters article and additional research before using a corporate case study.
+- [ ] Review the prepared repository and MIT license, then approve desired GitHub publication.
+- [ ] Execute hosted CI after an approved push; confirm WSL build on the owner's machine.
+- [ ] Review saved cloud environment settings and publish the prepared environment through the UI.
+- [ ] Validate a new cloud task independently; do not infer restoration from current-instance success.
+- [ ] Add authenticated service boundaries and backups before any remote operational deployment.
+
+Publication is not automatic. LinkedIn content remains a draft. No visibility change or third-party
+message has been sent. Resume claims are constrained to implemented code and actual measurements.

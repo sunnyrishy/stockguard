@@ -1,0 +1,65 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+  5.59      0.08     0.08  5726738     0.00     0.00  nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void>::json_value::destroy(nlohmann::json_abi_v3_11_3::detail::value_t)
+  5.59      0.16     0.08                             sqlite3RunParser
+  3.50      0.21     0.05                             sqlite3VdbeExec
+  2.80      0.25     0.04  2086142     0.00     0.00  std::_Function_handler<long (), main::{lambda()#2}>::_M_invoke(std::_Any_data const&)
+  2.80      0.29     0.04                             _init
+  2.80      0.33     0.04                             pagerWalFrames
+  2.80      0.37     0.04                             pcache1Fetch
+  2.80      0.41     0.04                             pcache1FetchStage2
+  2.10      0.44     0.03    60303     0.00     0.00  nlohmann::json_abi_v3_11_3::detail::serializer<nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> >::dump(nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> const&, bool, bool, unsigned int, unsigned int)
+  2.10      0.47     0.03                             exprAnalyze
+  2.10      0.50     0.03                             sqlite3AlterDropColumn
+  1.75      0.53     0.03  1425034     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()
+  1.40      0.55     0.02   803534     0.00     0.00  nlohmann::json_abi_v3_11_3::detail::serializer<nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> >::dump_escaped(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool)
+  1.40      0.57     0.02    10103     0.00     0.01  stockguard::Store::execute(nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> const&)
+  1.40      0.59     0.02                             balance_nonroot
+  1.40      0.61     0.02                             clearSelect
+  1.40      0.63     0.02                             exprDup.constprop.0
+  1.40      0.65     0.02                             pcache1TruncateUnsafe
+  1.40      0.67     0.02                             setDateTimeToCurrent
+  1.40      0.69     0.02                             sqlite3BtreeIndexMoveto
+  1.40      0.71     0.02                             sqlite3ColumnIndex
+  1.40      0.73     0.02                             sqlite3DbMallocRawNN
+  1.40      0.75     0.02                             sqlite3SrcListDelete
+  1.40      0.77     0.02                             sqlite3WhereBegin
+  1.40      0.79     0.02                             sqlite3_db_cacheflush
+  1.40      0.81     0.02                             vdbeRecordCompareString
+  1.40      0.83     0.02                             walChecksumBytes
+  1.40      0.85     0.02                             walWriteToLog
+  1.05      0.86     0.02    20100     0.00     0.00  stockguard::Observation::parse(nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> const&)
+  0.70      0.87     0.01   563148     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*)
+  0.70      0.88     0.01   150000     0.00     0.00  nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void>& nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void>::operator[]<char const>(char const*)
+  0.70      0.89     0.01    80008     0.00     0.00  stockguard::Statement::bind(int, long)
+  0.70      0.90     0.01    30000     0.00     0.00  stockguard::evaluate(stockguard::Observation const&, bool, std::optional<stockguard::Inventory> const&, stockguard::Policy const&, long)
+  0.70      0.91     0.01    20104     0.00     0.00  (anonymous namespace)::Quality::json() const
+  0.70      0.92     0.01    10103     0.00     0.01  stockguard::Store::execute_locked(nlohmann::json_abi_v3_11_3::basic_json<std::map, std::vector, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, long, unsigned long, double, std::allocator, nlohmann::json_abi_v3_11_3::adl_serializer, std::vector<unsigned char, std::allocator<unsigned char> >, void> const&)
+  0.70      0.93     0.01                             main::{lambda()#3}::operator()() const
+  0.70      0.94     0.01                             btreeCreateTable
+  0.70      0.95     0.01                             findElementWithHash.constprop.0
+  0.70      0.96     0.01                             fkLookupParent
+  0.70      0.97     0.01                             getCellInfo
+  0.70      0.98     0.01                             keywordCode.constprop.0
+  0.70      0.99     0.01                             pager_end_transaction
+  0.70      1.00     0.01                             pcache1Alloc
+  0.70      1.01     0.01                             pcache1Unpin
+  0.70      1.02     0.01                             pcacheSortDirtyList
+  0.70      1.03     0.01                             resolveExprStep
+  0.70      1.04     0.01                             selectExpander
+  0.70      1.05     0.01                             selectInnerLoop
+  0.70      1.06     0.01                             sqlite3AlterRenameColumn
+  0.70      1.07     0.01                             sqlite3BtreeBeginTrans
+  0.70      1.08     0.01                             sqlite3BtreeOpen
+  0.70      1.09     0.01                             sqlite3ExprCodeTarget
+  0.70      1.10     0.01                             sqlite3ExprCollSeq
+  0.70      1.11     0.01                             sqlite3ExprCompareCollSeq
+  0.70      1.12     0.01                             sqlite3ExprIfFalse
+  0.70      1.13     0.01                             sqlite3ExprListAppendGrow
+  0.70      1.14     0.01                             sqlite3ExprListDup
+  0.70      1.15     0.01                             sqlite3FinishCoding
+  0.70      1.16     0.01                             sqlite3GenerateConstraintChecks
+  0.70      1.17     0.01                             sqlite3MemCompare

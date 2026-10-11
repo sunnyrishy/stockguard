@@ -1,0 +1,4 @@
+# SQLite 3.54.0 wal.c tag-20200519-1 explicitly documents dirty-read false positives.
+# Upstream marks this function SQLITE_NO_TSAN for Clang; GCC lacks that annotation.
+# All application code and other SQLite paths remain instrumented.
+race:walIndexWriteHdr

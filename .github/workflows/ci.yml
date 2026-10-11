@@ -1,0 +1,57 @@
+name: correctness
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build-test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [debug, release, asan, tsan]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ cmake ninja-build libsqlite3-dev python3-venv
+      - name: Configure
+        env:
+          MODE: ${{ matrix.mode }}
+        run: |
+          flags=()
+          case "$MODE" in
+            debug) flags+=(-DCMAKE_BUILD_TYPE=Debug) ;;
+            release) flags+=(-DCMAKE_BUILD_TYPE=Release) ;;
+            asan) flags+=(-DCMAKE_BUILD_TYPE=Debug -DSTOCKGUARD_ASAN=ON) ;;
+            tsan) flags+=(-DCMAKE_BUILD_TYPE=Debug -DSTOCKGUARD_TSAN=ON) ;;
+          esac
+          cmake -S . -B build -G Ninja "${flags[@]}"
+      - name: Build
+        run: cmake --build build -j 2
+      - name: Tests
+        env:
+          MODE: ${{ matrix.mode }}
+        run: |
+          if [ "$MODE" = tsan ]; then
+            ctest --test-dir build -R 'Concurrent|SharedStore' --output-on-failure
+          else
+            ctest --test-dir build --output-on-failure
+          fi
+      - name: HTTP smoke
+        if: matrix.mode == 'debug'
+        run: python3 scripts/smoke.py
+  quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ cmake ninja-build libsqlite3-dev python3-venv
+          python3 -m venv .tools
+          .tools/bin/pip install clang-format==19.1.7 clang-tidy==19.1.0.1
+          echo "$PWD/.tools/bin" >> "$GITHUB_PATH"
+      - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+      - run: scripts/check-format.sh
+      - run: scripts/check-analysis.sh
+      - run: node --check dashboard/app.js
