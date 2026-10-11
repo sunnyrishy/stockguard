@@ -56,3 +56,6 @@ CI defines Debug, Release, ASan/UBSan and scoped TSan jobs, HTTP smoke, formatti
 clang-tidy checks. These commands were validated locally, but hosted GitHub Actions have
 not run because no remote push or publication occurred. WSL2 instructions have not been
 independently executed on the owner's Windows machine.
+
+Final local results: Debug 30/30, Release 30/30, ASan/UBSan 30/30, scoped TSan 4/4;
+HTTP smoke, browser workflow, formatting and selected static analysis passed.

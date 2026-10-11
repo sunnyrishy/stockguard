@@ -13,7 +13,7 @@ fresh-task restoration are not verified. The specific Reuters motivation remains
 - [x] Implemented ID/scan replay protection, conflicts, partial batches and version-checked review.
 - [x] Added queries, pending review, metrics, immutable history and audit/review reporting.
 - [x] Implemented bounded local HTTP adapter and browser scenario/review demonstration.
-- [x] Passed 30 GoogleTests in Debug and ASan/UBSan builds.
+- [x] Passed 30 GoogleTests in Debug, Release and ASan/UBSan builds.
 - [x] Passed four concurrency tests under GCC TSan with one documented upstream WAL suppression.
 - [x] Passed clang-format 19 checks and selected clang-tidy analyzers with no project diagnostics.
 - [x] Passed HTTP functional smoke, JSON request bounds and cross-site request rejection checks.
@@ -23,6 +23,8 @@ fresh-task restoration are not verified. The specific Reuters motivation remains
 - [x] Ran a separate GCC -pg profile; retained a flat-profile excerpt.
 - [x] Exercised the repeatable cloud bootstrap, README example and idempotent service starter.
 - [x] Prepared CI configuration, MIT license, dependency notices and publication/career drafts.
+- [x] Saved cloud install_script and start_skill, plus additive research domain settings.
+- [x] Created a local implementation commit on main; remote push remains unperformed.
 
 ## Decisions
 - Complete nonnegative integer product-location counts; no mixed movement/count semantics.
@@ -36,7 +38,7 @@ fresh-task restoration are not verified. The specific Reuters motivation remains
 
 ## Checks and evidence
 Detailed commands: docs/testing.md. Raw counters and measurements: reports/benchmark-*.json.
-Final suite: 30 passed, zero failed/skipped in Debug and ASan/UBSan. Scoped TSan: 4 passed.
+Final suite: 30 passed, zero failed/skipped in Debug, Release and ASan/UBSan. Scoped TSan: 4 passed.
 HTTP smoke, browser smoke, formatting, selected static analysis and README example passed.
 SQLite is 3.54.0 in final builds. The original unsuppressed GCC TSan run returned nonzero
 on SQLite's documented dirty-read protocol; diagnosis and limit are in ADR 002.
@@ -67,3 +69,11 @@ Starbucks material accessed does not corroborate the specific discontinued-count
 
 Publication is not automatic. LinkedIn content remains a draft. No visibility change or third-party
 message has been sent. Resume claims are constrained to implemented code and actual measurements.
+
+## Cloud configuration handoff
+The draft save returned status=saved. install_script contains the tested cloud bootstrap,
+formatting, static analysis and functional HTTP check. start_skill records tool activation,
+working directory, build/test commands, service startup, readiness and process-restart rules.
+Research domains were added while preserving package-manager presets. Saving did not publish
+the environment. No credentials were required. Local-only Git commits cannot be assumed to
+restore reliably in a new task; remote publication and restoration verification remain pending.

@@ -114,7 +114,7 @@ A custom policy can be supplied with `--policy config/policy.json`.
 
 ## Evidence and measurements
 
-The final local Debug build passes all 30 GoogleTests. ASan/UBSan passes the same suite.
+The final local Debug and Release builds pass all 30 GoogleTests. ASan/UBSan passes the same suite.
 Four concurrency tests pass under TSan with one documented upstream SQLite WAL-header
 suppression for GCC; see [ADR 002](docs/decisions/002-sqlite-sanitizers.md). Formatting and
 selected clang-tidy analyzers pass. HTTP and real Chromium browser smoke checks pass.
