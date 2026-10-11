@@ -16,11 +16,11 @@ own: a model observation should not silently become an authoritative inventory f
 - Complete-count validation with coverage, freshness, version, confidence and discrepancy rules.
 - Durable observation IDs, conflicting-payload rejection and alternate-ID scan replay protection.
 - Partial batches with independent results and transactions.
-- Human confirm, correction and rejection with optimistic version checks.
+- Human confirmation and correction with optimistic version checks; rejection without ledger changes.
 - Immutable original decisions, pending review queries, review history and transactional audit.
 - SQLite WAL, FULL synchronous, foreign keys, schema versioning and RAII rollback.
 - Local browser demo with scenario buttons, review forms, ledger and benchmark results.
-- 30 GoogleTests, fault injection, process-death recovery and concurrent submission tests.
+- 33 GoogleTests, fault injection, process-death recovery and concurrent submission tests.
 
 ```mermaid
 flowchart LR
@@ -114,7 +114,7 @@ A custom policy can be supplied with `--policy config/policy.json`.
 
 ## Evidence and measurements
 
-The final local Debug and Release builds pass all 30 GoogleTests. ASan/UBSan passes the same suite.
+The final local Debug and Release builds pass all 33 GoogleTests. ASan/UBSan passes the same suite.
 Four concurrency tests pass under TSan with one documented upstream SQLite WAL-header
 suppression for GCC; see [ADR 002](docs/decisions/002-sqlite-sanitizers.md). Formatting and
 selected clang-tidy analyzers pass. HTTP and real Chromium browser smoke checks pass.

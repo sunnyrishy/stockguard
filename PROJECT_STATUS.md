@@ -13,7 +13,7 @@ fresh-task restoration are not verified. The specific Reuters motivation remains
 - [x] Implemented ID/scan replay protection, conflicts, partial batches and version-checked review.
 - [x] Added queries, pending review, metrics, immutable history and audit/review reporting.
 - [x] Implemented bounded local HTTP adapter and browser scenario/review demonstration.
-- [x] Passed 30 GoogleTests in Debug, Release and ASan/UBSan builds.
+- [x] Passed 33 GoogleTests in Debug, Release and ASan/UBSan builds.
 - [x] Passed four concurrency tests under GCC TSan with one documented upstream WAL suppression.
 - [x] Passed clang-format 19 checks and selected clang-tidy analyzers with no project diagnostics.
 - [x] Passed HTTP functional smoke, JSON request bounds and cross-site request rejection checks.
@@ -38,7 +38,7 @@ fresh-task restoration are not verified. The specific Reuters motivation remains
 
 ## Checks and evidence
 Detailed commands: docs/testing.md. Raw counters and measurements: reports/benchmark-*.json.
-Final suite: 30 passed, zero failed/skipped in Debug, Release and ASan/UBSan. Scoped TSan: 4 passed.
+Final suite: 33 passed, zero failed/skipped in Debug, Release and ASan/UBSan. Scoped TSan: 4 passed.
 HTTP smoke, browser smoke, formatting, selected static analysis and README example passed.
 SQLite is 3.54.0 in final builds. The original unsuppressed GCC TSan run returned nonzero
 on SQLite's documented dirty-read protocol; diagnosis and limit are in ADR 002.
@@ -93,3 +93,10 @@ restore reliably in a new task; remote publication and restoration verification 
 
 The follow-up cloud draft retains existing setup/start instructions and adds the two Python
 reporting guards. The draft save was confirmed. Publication remains unperformed.
+
+## Review resolution fix
+Pending evidence can now be rejected after catalog deactivation, without an inventory record,
+or after the ledger version advances. Confirmation and correction retain their existing checks.
+Three regression tests cover closure, durable replay, unchanged audit totals and conflicting actors.
+The HTTP check and real Chromium workflow verify rejection without a supplied version.
+All 33 tests pass in Debug, Release and ASan/UBSan; scoped TSan, formatting and static analysis pass.

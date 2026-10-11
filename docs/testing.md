@@ -26,9 +26,9 @@ TSan uses the single upstream WAL-header suppression described in
 [ADR 002](decisions/002-sqlite-sanitizers.md). No StockGuard function is suppressed.
 ASan/UBSan instruments the application and compiled SQLite source. Never combine ASan and TSan.
 
-The 30 GoogleTests cover rule boundaries, malformed fields, public API arithmetic safety,
+The 33 GoogleTests cover rule boundaries, malformed fields, public API arithmetic safety,
 SQLite integration, immutable decisions, replay across restarts, scan-key duplication,
-partial batch success, movements, catalog-unit invariants, review correction, conflicting
+partial batch success, movements, catalog-unit invariants, review correction, inventory-independent rejection, durable rejection replay, conflicting
 reviewers, foreign keys, migrations, pagination and ledger/audit chains. Fault injection
 throws after observation insertion, inventory update and before commit. A child exits in
 an uncommitted write and the parent verifies recovery and safe replay. Concurrent tests
@@ -61,6 +61,6 @@ Final local results: Debug 30/30, Release 30/30, ASan/UBSan 30/30, scoped TSan 4
 HTTP smoke, browser workflow, formatting and selected static analysis passed.
 
 Benchmark reporting guards: `python3 -m unittest discover -s tests -p 'test_*.py' -v`.
-Two Python tests reject false successful reporting. They complement the 30 GoogleTests;
+Two Python tests reject false successful reporting. They complement the 33 GoogleTests;
 no GoogleTest was removed or skipped. A real 100-event native run additionally verified
 closed-database audit and inventory totals. The two reporting guards run in the Debug CI job.

@@ -53,6 +53,16 @@ document.querySelectorAll('[data-scenario]').forEach(button => {button.onclick =
   await ingest(o);
 });});
 byId('replay').onclick = () => run(async () => {if (!lastScan) throw new Error('Submit a scan first.'); await ingest(lastScan);});
+function updateReviewFields() {
+  const form = byId('review');
+  const modifiesInventory = form.elements.action.value !== 'reject';
+  form.elements.expected_version.disabled = !modifiesInventory;
+  form.elements.expected_version.required = modifiesInventory;
+  form.elements.quantity.disabled = form.elements.action.value !== 'correct';
+  form.elements.quantity.required = form.elements.action.value === 'correct';
+}
+byId('review').elements.action.onchange = updateReviewFields;
+updateReviewFields();
 for (const id of ['scan', 'review', 'product', 'initialize', 'movement']) {
   byId(id).onsubmit = event => {event.preventDefault(); run(async () => {
     const data = Object.fromEntries(new FormData(event.target));
@@ -62,7 +72,7 @@ for (const id of ['scan', 'review', 'product', 'initialize', 'movement']) {
       data.observed_at = now(); data.source = 'demo-manual'; await ingest(data);
     } else {
       data.op = id === 'product' ? 'product_put' : id;
-      if (id === 'review') data.verified_at = now();
+      if (id === 'review' && data.action !== 'reject') data.verified_at = now();
       if (id === 'initialize' || id === 'movement') data.actor = 'demo-operator';
       if (id === 'movement') data.id = unique();
       byId('decision').textContent = JSON.stringify(await api(data), null, 2);

@@ -18,7 +18,9 @@ confidence, coverage, discrepancy, policy and last update source. Deterministic 
 accepts an explicit clock value. Service callers cannot supply the server decision clock.
 
 A human must perform a fresh complete verification, rather than approve an old scan blindly.
-Review rejects negative corrections, stale verification and changed inventory versions.
+Confirmation and correction reject negative corrections, stale verification and changed inventory versions.
+Rejection only closes evidence, so missing inventory, catalog deactivation or an advanced
+ledger version cannot prevent it. Rejection creates a review record without an inventory audit.
 An initial decision is immutable; a separate review action and audit preserve its history.
 No rule can catch a confidently wrong small count that satisfies all constraints.
 
@@ -36,7 +38,7 @@ flowchart TD
     Rules --> Review[REVIEW: preserve inventory]
     Rules --> Defer[DEFER: preserve inventory]
     Rules --> Invalid[REJECT: preserve inventory]
-    Review --> Human[Fresh human verification with version check]
+    Review --> Human[Confirm or correct with fresh version check, or reject evidence]
     Defer --> Human
     Human --> Resolution[Record review and optional inventory/audit]
 ```

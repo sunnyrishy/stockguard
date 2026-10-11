@@ -186,15 +186,17 @@ Json Store::review(const Json &r) {
     require(query.text(2) == "REVIEW" || query.text(2) == "DEFER", "not_reviewable",
             "Observation is not pending review or deferred");
     const auto o = Observation::parse(Json::parse(query.text(0)));
-    require(active_product(o.product_id), "invalid_product", "Product is missing or inactive");
     const auto state = inventory(o.product_id, o.location_id);
-    require(state.has_value(), "missing_inventory", "Initialize trusted inventory before review");
-    auto expected = integer_field(r, "expected_version", 1, 1'000'000'000'000LL);
-    require(expected == state->version, "version_conflict",
-            "Inventory changed, perform fresh verification");
     const auto now = clock_();
-    Integer next = state->quantity;
+    Integer next = state ? state->quantity : 0;
+    // Rejection resolves evidence only; it never needs permission to update inventory.
     if (action != "reject") {
+        require(active_product(o.product_id), "invalid_product", "Product is missing or inactive");
+        require(state.has_value(), "missing_inventory",
+                "Initialize trusted inventory before review");
+        auto expected = integer_field(r, "expected_version", 1, 1'000'000'000'000LL);
+        require(expected == state->version, "version_conflict",
+                "Inventory changed, perform fresh verification");
         auto verified = integer_field(r, "verified_at", 0, 253402300799LL);
         require(verified >= state->updated_at && verified <= now + policy_.future_skew_seconds &&
                     now - verified <= policy_.max_age_seconds,
@@ -205,13 +207,14 @@ Json Store::review(const Json &r) {
         audit(o.product_id, o.location_id, state->quantity, next, state->version + 1, "review", id,
               actor, now);
     }
-    Json result = {{"observation_id", id},
-                   {"action", action},
-                   {"actor", actor},
-                   {"quantity", next},
-                   {"version", state->version + (action == "reject" ? 0 : 1)},
-                   {"resolved_at", now},
-                   {"replayed", false}};
+    Json result = {
+        {"observation_id", id},
+        {"action", action},
+        {"actor", actor},
+        {"quantity", state ? Json(next) : Json(nullptr)},
+        {"version", state ? Json(state->version + (action == "reject" ? 0 : 1)) : Json(nullptr)},
+        {"resolved_at", now},
+        {"replayed", false}};
     auto insert = database_.prepare("INSERT INTO review_actions VALUES(?,?,?,?,?)");
     insert.bind(1, id);
     insert.bind(2, r.dump());

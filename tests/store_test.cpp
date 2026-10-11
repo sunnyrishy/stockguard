@@ -416,4 +416,69 @@ TEST_F(Persistence, CatalogUnitCannotReinterpretExistingInventory) {
     EXPECT_EQ(s.execute({{"op", "products"}, {"id", "milk"}})[0]["unit"], "carton");
     EXPECT_EQ(state(s)["quantity"], 100);
 }
+
+TEST_F(Persistence, DeferredWithoutInventoryCanBeRejectedAndReplayedAfterRestart) {
+    Json rejection = {
+        {"op", "review"}, {"observation_id", "o1"}, {"actor", "reviewer"}, {"action", "reject"}};
+    Json saved;
+    {
+        Store s(path, {}, now);
+        seed(s);
+        auto o = observation();
+        o["location_id"] = "uninitialized";
+        EXPECT_EQ(ingest(s, o)["reason"], "missing_inventory");
+        auto confirm = rejection;
+        confirm["action"] = "confirm";
+        confirm["expected_version"] = 1;
+        confirm["verified_at"] = 1000;
+        EXPECT_THROW(s.execute(confirm), Error);
+        saved = s.execute(rejection);
+        EXPECT_TRUE(saved["quantity"].is_null());
+        EXPECT_TRUE(saved["version"].is_null());
+        EXPECT_EQ(s.execute({{"op", "pending"}}).size(), 0);
+        EXPECT_EQ(s.execute({{"op", "audit"}}).size(), 1);
+    }
+    Store restarted(path, {}, now);
+    auto replay = restarted.execute(rejection);
+    EXPECT_EQ(replay["replayed"], true);
+    replay["replayed"] = false;
+    EXPECT_EQ(replay, saved);
+    EXPECT_EQ(restarted.execute({{"op", "reviews"}}).size(), 1);
+}
+TEST_F(Persistence, DeactivatedProductCanRejectPendingObservationWithoutChangingInventory) {
+    Store s(path, {}, now);
+    seed(s);
+    ingest(s, observation("o1", 160));
+    s.execute({{"op", "product_put"},
+               {"id", "milk"},
+               {"name", "Milk"},
+               {"category", "dairy"},
+               {"unit", "carton"},
+               {"status", "inactive"}});
+    EXPECT_THROW(s.execute(correction()), Error);
+    auto result = s.execute(
+        {{"op", "review"}, {"observation_id", "o1"}, {"actor", "reviewer"}, {"action", "reject"}});
+    EXPECT_EQ(result["quantity"], 100);
+    EXPECT_EQ(result["version"], 1);
+    EXPECT_EQ(s.execute({{"op", "pending"}}).size(), 0);
+    EXPECT_EQ(s.execute({{"op", "audit"}}).size(), 1);
+    EXPECT_EQ(state(s)["quantity"], 100);
+    EXPECT_EQ(state(s)["version"], 1);
+}
+TEST_F(Persistence, RejectionDoesNotRequireStaleInventoryVersionAndConflictingActorsRemainSafe) {
+    Store s(path, {}, now);
+    seed(s);
+    ingest(s, observation("o1", 160));
+    ingest(s, observation("o2", 101));
+    auto rejection = correction("reject", 1);
+    auto result = s.execute(rejection);
+    EXPECT_EQ(result["version"], 2);
+    EXPECT_EQ(result["quantity"], 101);
+    EXPECT_EQ(state(s)["quantity"], 101);
+    EXPECT_EQ(state(s)["version"], 2);
+    EXPECT_EQ(s.execute({{"op", "audit"}}).size(), 2);
+    rejection["actor"] = "another-reviewer";
+    EXPECT_THROW(s.execute(rejection), Error);
+    EXPECT_EQ(s.execute({{"op", "reviews"}}).size(), 1);
+}
 } // namespace

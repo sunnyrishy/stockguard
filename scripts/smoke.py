@@ -51,6 +51,13 @@ with tempfile.TemporaryDirectory(prefix='stockguard-smoke-') as tmp:
         assert api({'op': 'inventory'})[0]['version'] == 3
         assert len(api({'op': 'audit'})) == 3
         assert len(api({'op': 'pending'})) == 0
+        o.update(id='smoke-deferred', scan_id='smoke-deferred-batch', location_id='missing')
+        assert api({'op': 'ingest', 'observation': o})['status'] == 'DEFER'
+        rejected = api({'op': 'review', 'observation_id': 'smoke-deferred',
+                        'actor': 'smoke-reviewer', 'action': 'reject'})
+        assert rejected['quantity'] is None and rejected['version'] is None
+        assert len(api({'op': 'pending'})) == 0
+        assert len(api({'op': 'audit'})) == 3
         for headers, expected in [({'Host': 'evil.example'}, 403),
                                   ({'Content-Type': 'text/plain'}, 415),
                                   ({'Content-Type': 'application/json', 'Origin': 'https://evil.example'}, 403)]:
