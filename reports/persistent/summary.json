@@ -1,0 +1,95 @@
+{
+  "run_id": "5f165086-faf8-425a-be1e-c959f5ee9e16",
+  "started_at_utc": "2026-10-11T16:43:12.745376+00:00",
+  "configurations": [
+    {
+      "observations": 10000,
+      "workers": 1,
+      "repetitions": 3,
+      "throughput_min": 1817.7450784867833,
+      "throughput_median": 2001.6574812846707,
+      "throughput_max": 2011.3763967937764,
+      "runs": [
+        {
+          "file": "benchmark-10000-r1.json",
+          "throughput": {
+            "database_bytes": 12476416,
+            "duplicate_replays_prevented": 100,
+            "final_inventory": [
+              {
+                "location_id": "store",
+                "product_id": "milk",
+                "quantity": 100,
+                "source": "observation",
+                "updated_at": 1000,
+                "version": 10001
+              }
+            ],
+            "max_rss_kib": 15616,
+            "median_us": 468.945,
+            "observations_per_second": 1817.7450784867833,
+            "p95_us": 995.33,
+            "p99_us": 1976.997,
+            "seconds": 5.501321455,
+            "total_applied_events": 10000
+          }
+        },
+        {
+          "file": "benchmark-10000-r2.json",
+          "throughput": {
+            "database_bytes": 12476416,
+            "duplicate_replays_prevented": 100,
+            "final_inventory": [
+              {
+                "location_id": "store",
+                "product_id": "milk",
+                "quantity": 100,
+                "source": "observation",
+                "updated_at": 1000,
+                "version": 10001
+              }
+            ],
+            "max_rss_kib": 15764,
+            "median_us": 422.325,
+            "observations_per_second": 2001.6574812846707,
+            "p95_us": 780.133,
+            "p99_us": 2011.138,
+            "seconds": 4.995859728,
+            "total_applied_events": 10000
+          }
+        },
+        {
+          "file": "benchmark-10000-r3.json",
+          "throughput": {
+            "database_bytes": 12476416,
+            "duplicate_replays_prevented": 100,
+            "final_inventory": [
+              {
+                "location_id": "store",
+                "product_id": "milk",
+                "quantity": 100,
+                "source": "observation",
+                "updated_at": 1000,
+                "version": 10001
+              }
+            ],
+            "max_rss_kib": 18068,
+            "median_us": 428.875,
+            "observations_per_second": 2011.3763967937764,
+            "p95_us": 788.595,
+            "p99_us": 1730.431,
+            "seconds": 4.971719871,
+            "total_applied_events": 10000
+          }
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "database_storage_directory": ".runtime",
+    "filesystem_type": "overlayfs",
+    "executable_sha256": "1ad31b95a1cb8f8ccb1e7672e82f2fe7be94ea0e4f72bc3fd3a659854c8bd734",
+    "physical_durability_verified": false
+  },
+  "finished_at_utc": "2026-10-11T16:43:28.779289+00:00"
+}

@@ -40,7 +40,9 @@ jobs:
           fi
       - name: HTTP smoke
         if: matrix.mode == 'debug'
-        run: python3 scripts/smoke.py
+        run: |
+          python3 scripts/smoke.py
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
   quality:
     runs-on: ubuntu-24.04
     steps:

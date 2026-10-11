@@ -59,3 +59,8 @@ independently executed on the owner's Windows machine.
 
 Final local results: Debug 30/30, Release 30/30, ASan/UBSan 30/30, scoped TSan 4/4;
 HTTP smoke, browser workflow, formatting and selected static analysis passed.
+
+Benchmark reporting guards: `python3 -m unittest discover -s tests -p 'test_*.py' -v`.
+Two Python tests reject false successful reporting. They complement the 30 GoogleTests;
+no GoogleTest was removed or skipped. A real 100-event native run additionally verified
+closed-database audit and inventory totals. The two reporting guards run in the Debug CI job.

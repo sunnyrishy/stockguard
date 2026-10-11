@@ -97,3 +97,40 @@ gprof -b -p ../build-profile/stockguard_benchmark gmon.out > profile-full.txt
 Only use a new database path. Initial measurements against the old SQLite package were
 superseded after upstream research identified the WAL-reset issue. Final checked-in JSON
 reports all identify SQLite 3.54.0. There is no claim that a source upgrade improved performance.
+
+## Repeated repository-storage measurements
+
+A follow-up runs the same unchanged Release executable on the repository workspace's
+`.runtime` directory, rather than tmpfs. Each of three runs processes 10,000 accepted
+observations with one worker, a new database and FULL synchronous transactions.
+Reports preserve a shared run ID, per-run latency, binary SHA256, actual CMake build flags
+and the observed filesystem type (overlayfs). After the native process closes, the runner
+opens each database read-only and requires SQLite integrity_check=ok, zero foreign-key
+violations, 10,000 observation rows, 10,001 audit rows, one inventory record at quantity
+100 and version 10,001. Verification time is outside the timed native ingestion interval.
+
+Observed throughput: 1,817.7 to 2,011.4 observations/s,
+with median 2,001.7. Raw results are in reports/persistent.
+These three runs show variability; they are not a confidence interval or a capacity SLA.
+Overlay storage and the cloud host's flush behavior do not prove physical power-loss
+resilience. The previous tmpfs measurements remain a separate experiment. The executable
+is unchanged, so storage and run conditions must not be reported as a code optimization.
+
+```sh
+mkdir -p .runtime
+python3 scripts/run-benchmarks.py --counts 10000 --workers 1 --repeats 3 \
+  --storage-directory .runtime --output reports/persistent
+```
+
+`--counts` chooses serial sizes. `--workers` chooses additional 10,000-observation
+concurrency configurations. `--repeats` runs each configuration independently, up to 20.
+Omitting `--storage-directory` uses system temporary storage. Output files are atomically
+replaced only after the corresponding process and database checks succeed; summary.json
+is written after all selected runs finish. Check the run ID and process exit code to avoid
+mistaking a prior summary for a failed new experiment. Existing records can be retained by
+choosing a new output directory. The runner uses Python's SQLite reader only after native
+writers close, in read-only mode, to independently inspect standard tables and invariants.
+
+Two reporting regression tests verify that nonzero process exits and successful-looking
+JSON without a real persisted database cannot create successful reports. A real 100-event
+run also verified this reporting path. No assertions or durability options were disabled.

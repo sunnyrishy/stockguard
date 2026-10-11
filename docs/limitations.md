@@ -17,7 +17,8 @@
   retention policy or exported backup command.
 - The benchmark uses independent labeled snapshots for quality, and consistent count events
   for durable throughput. FULL synchronous on tmpfs measures transaction machinery, not physical
-  disk flush latency. One run per configuration is not a statistical capacity estimate.
+  disk flush latency. Initial tmpfs figures are one run per configuration. The separate workspace experiment
+  has three repetitions, still insufficient for a statistical capacity estimate.
 - Largest measured workload is 100,000 observations. A million-event run is supported but unrun.
   Confidence calibration, real labeled data and direct lock-wait profiling remain future work.
 - GCC TSan applies one documented upstream SQLite WAL-header suppression. Application code

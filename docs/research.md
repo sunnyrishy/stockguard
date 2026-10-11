@@ -36,3 +36,8 @@ upstream affected range for the WAL-reset race. Final builds compile checksum-ve
 SQLite 3.54.0, including sanitizer instrumentation. Initial validation and measurements
 were superseded by fresh tests and reports. No claim is made that our small test suite
 would reproduce that upstream race.
+
+Follow-up: Reuters' public site-search endpoint again returned HTTP 401. Bing and Yahoo
+search requests returned HTTP 403. Their hostnames were added to the environment draft
+without removing existing entries. No search snippet, article date or unverified corporate
+claim was promoted to an established fact. Recheck after relevant environment updates.

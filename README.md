@@ -134,7 +134,10 @@ cmake --build build-release -j 2
 python3 scripts/run-benchmarks.py
 ```
 
-One run per configuration is recorded, up to 100,000 observations and four workers. A
+Initial tmpfs runs cover up to 100,000 observations and four workers. A separate three-run
+workspace-storage experiment measures 10,000 events per run and independently verifies the
+closed database, observation totals and audit rows. The runner records storage type and
+reports a throughput range and median. See the benchmark methodology for reproduction. A
 million-event run is supported but unrun. No performance improvement or capacity guarantee
 is inferred from these measurements. [Testing instructions](docs/testing.md) include
 sanitizers, formatting, static analysis and the optional screenshot-producing browser test.
