@@ -136,3 +136,9 @@ Chromium exercised both modes, all four outcomes, replay, correction, rejection,
 controls and mobile sizing. Four Node regression tests cover the browser model.
 A static builder and GitHub Pages deployment workflow are included. Enabling Pages through
 the GitHub API was blocked by HTTP Forbidden; deployment verification follows the push.
+
+Website implementation commit 90ec219 passed all correctness jobs in Actions run 38169376032.
+Website run 38169376209 built and uploaded the deployable github-pages artifact, but
+its deployment failed because Pages is not enabled (Get Pages site: Not Found).
+To complete public hosting, choose GitHub Actions in repository Settings → Pages and rerun
+the website workflow. Changing that setting through this environment's GitHub API is blocked.
