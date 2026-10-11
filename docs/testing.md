@@ -63,3 +63,7 @@ Benchmark reporting guards: `python3 -m unittest discover -s tests -p 'test_*.py
 Two Python tests reject false successful reporting. They complement the 33 GoogleTests;
 no GoogleTest was removed or skipped. A real 100-event native run additionally verified
 closed-database audit and inventory totals. The two reporting guards run in the Debug CI job.
+
+TSan CI repeats the four concurrency tests 20 times each. TSan builds use the
+[documented build-local SQLite atomic-access patch](decisions/002-sqlite-sanitizers.md)
+and the existing WAL-header suppression; no additional suppression is enabled.

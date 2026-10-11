@@ -117,3 +117,12 @@ The demo starter passed health checks and reused its process on a second invocat
 The temporary demo process was stopped after verification. This verifies Git-based setup
 on this Linux host, not a new cloud task or the owner's WSL installation.
 Latest hosted CI for that commit passed: Actions run 38162276395.
+
+## Hosted TSan recovery fix
+Actions run 38165942404 reported a mixed atomic/plain access to SQLite WAL recovery
+`nBackfill`. Repeated local tests reproduced the warning. A TSan-only generated source
+copy now uses SQLite's AtomicStore for that recovery write. The verified upstream download
+and normal build modes remain unchanged; no suppression was added.
+All four concurrency tests passed 20 consecutive repetitions each after the patch.
+All 33 Debug tests and formatting passed. Missing/duplicate patch contexts were rejected.
+See ADR 002 for scope and limits. Hosted verification of this fix follows the push.

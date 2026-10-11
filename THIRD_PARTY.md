@@ -15,3 +15,7 @@ Retain their license notices when redistributing binaries or source bundles.
 Archive SHA256 values are checked for CMake dependencies and the official SQLite archive.
 TLS verification remains enabled. Default builds compile the same pinned SQLite source on Linux and WSL. An explicit system
 SQLite override requires version 3.51.3 or newer, including the WAL-reset fix.
+
+TSan builds apply one build-local atomic-access patch to SQLite WAL recovery. The verified
+archive stays unchanged; other build modes use upstream source. See
+[ADR 002](docs/decisions/002-sqlite-sanitizers.md) for the patch and instrumentation limits.

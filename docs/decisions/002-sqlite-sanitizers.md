@@ -24,3 +24,20 @@ or StockGuard patterns. Review it when upgrading SQLite or changing compilers.
 
 References: https://sqlite.org/wal.html (WAL-reset fix), and the official checksum-pinned
 3.54.0 amalgamation. The initial unsuppressed report remains in the ignored runtime log.
+
+## WAL recovery atomic access fix
+A later hosted run failed in `walTryBeginRead` (sqlite3.c:70065), reading `nBackfill`
+with `AtomicLoad` while `walIndexRecover` (68460) reset it with a plain write.
+Repeated local runs reproduced that report. This is a distinct mixed atomic/plain access,
+not the previously annotated WAL-header copy; the existing suppression does not cover it.
+
+For TSan builds only, cmake/SQLiteTsan.cmake generates a build-local SQLite copy and
+changes that one recovery write to `AtomicStore(&pInfo->nBackfill, 0)`, using SQLite's
+existing relaxed atomic primitive. The original checksum-verified download is untouched.
+The patch requires exactly one matching context and fails configuration otherwise.
+Normal Debug, Release and ASan builds use unmodified upstream source. This is a local
+sanitizer compatibility patch, not an upstream fix or a claim that the original access
+causes inventory corruption. The system-SQLite override cannot apply this patch.
+
+No suppression was added. SQLite remains instrumented, and CI repeats each concurrency
+test 20 times to exercise recovery timing. Review this patch on dependency upgrades.

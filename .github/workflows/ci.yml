@@ -34,7 +34,7 @@ jobs:
           MODE: ${{ matrix.mode }}
         run: |
           if [ "$MODE" = tsan ]; then
-            ctest --test-dir build -R 'Concurrent|SharedStore' --output-on-failure
+            ctest --test-dir build -R 'Concurrent|SharedStore' --repeat until-fail:20 --output-on-failure
           else
             ctest --test-dir build --output-on-failure
           fi
